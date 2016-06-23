@@ -3,7 +3,41 @@
 	"GoVersion": "go1.6.2",
 	"Packages": [
 		"github.com/yamamoto-febc/arukas-ship",
-		"github.com/yamamoto-febc/arukas-ship/cmd/arukas-ship"
+		"github.com/yamamoto-febc/arukas-ship/arukas",
+		"github.com/yamamoto-febc/arukas-ship/cmd/arukas-ship",
+		"github.com/yamamoto-febc/arukas-ship/message"
 	],
-	"Deps": []
+	"Deps": [
+		{
+			"ImportPath": "github.com/alecthomas/template",
+			"Rev": "a0175ee3bccc567396460bf5acd36800cb10c49c"
+		},
+		{
+			"ImportPath": "github.com/alecthomas/units",
+			"Rev": "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a"
+		},
+		{
+			"ImportPath": "github.com/arukasio/cli",
+			"Comment": "v0.1.2-5-ge6496fa",
+			"Rev": "e6496fa246a13254cfa5d3278162144259350943"
+		},
+		{
+			"ImportPath": "github.com/gedex/inflector",
+			"Rev": "91797f1712fd58f224781be1080b8613d096187e"
+		},
+		{
+			"ImportPath": "github.com/manyminds/api2go/jsonapi",
+			"Comment": "1.0-RC1-34-g5207f05",
+			"Rev": "5207f05d44090999ebf2e09b3e66566484c4dbee"
+		},
+		{
+			"ImportPath": "github.com/stretchr/testify/assert",
+			"Rev": "e4ec8152c15fc46bd5056ce65997a07c7d415325"
+		},
+		{
+			"ImportPath": "gopkg.in/alecthomas/kingpin.v2",
+			"Comment": "v2.1.11",
+			"Rev": "8cccfa8eb2e3183254457fb1749b2667fbc364c7"
+		}
+	]
 }

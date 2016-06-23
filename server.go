@@ -2,27 +2,11 @@ package ship
 
 import (
 	"encoding/json"
+	"github.com/yamamoto-febc/arukas-ship/arukas"
+	"github.com/yamamoto-febc/arukas-ship/message"
 	"log"
 	"net/http"
 )
-
-type IncomingMessage struct {
-	Repository struct {
-		Status    string
-		RepoUrl   string `json:"repo_url"`
-		Owner     string
-		IsPrivate bool `json:"is_private"`
-		Name      string
-		StarCount int    `json:"star_count"`
-		RepoName  string `json:"repo_name"`
-	}
-
-	Push_data struct {
-		PushedAt int `json:"pushed_at"`
-		Images   []string
-		Pusher   string
-	}
-}
 
 var currentConfig *Config
 
@@ -42,7 +26,7 @@ func Log(handler http.Handler) http.Handler {
 func reqHandler(w http.ResponseWriter, r *http.Request) {
 	if authReqestByToken(r) {
 		decoder := json.NewDecoder(r.Body)
-		var imgConfig IncomingMessage
+		var imgConfig message.IncomingMessage
 
 		err := decoder.Decode(&imgConfig)
 		if err != nil {
@@ -50,7 +34,15 @@ func reqHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print(err)
 			return
 		}
-		go handleIncomingMsg(imgConfig)
+
+		appName := r.URL.Query().Get("app")
+		if appName == "" {
+			http.Error(w, "Could not read AppName. Please set 'app' parameter.", 500)
+			log.Print("URL Parameter 'app' is empty.")
+			return
+		}
+
+		go handleIncomingMsg(appName, imgConfig)
 		return
 	}
 	http.Error(w, "Not Authorized", 401)
@@ -61,8 +53,15 @@ func authReqestByToken(r *http.Request) bool {
 	return currentConfig.Serve.Token == "" || key == currentConfig.Serve.Token
 }
 
-func handleIncomingMsg(img IncomingMessage) {
-	//arukas api call
-	log.Printf("Incoming push_data: %#v", img.Push_data)
-	log.Printf("Incoming repository: %#v", img.Repository)
+func handleIncomingMsg(appName string, img message.IncomingMessage) {
+
+	client, err := arukas.NewArukasClient()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = client.HandleRequest(appName, &img)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }
