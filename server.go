@@ -63,5 +63,6 @@ func authReqestByToken(r *http.Request) bool {
 
 func handleIncomingMsg(img IncomingMessage) {
 	//arukas api call
-
+	log.Printf("Incoming push_data: %#v", img.Push_data)
+	log.Printf("Incoming repository: %#v", img.Repository)
 }
