@@ -1,0 +1,9 @@
+{
+	"ImportPath": "github.com/yamamoto-febc/arukas-ship",
+	"GoVersion": "go1.6.2",
+	"Packages": [
+		"github.com/yamamoto-febc/arukas-ship",
+		"github.com/yamamoto-febc/arukas-ship/cmd/arukas-ship"
+	],
+	"Deps": []
+}
