@@ -2,6 +2,7 @@ package ship
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/yamamoto-febc/arukas-ship/arukas"
 	"github.com/yamamoto-febc/arukas-ship/message"
 	"log"
@@ -13,7 +14,7 @@ var currentConfig *Config
 func Serve(config *Config) error {
 	currentConfig = config
 	http.HandleFunc("/", reqHandler)
-	return http.ListenAndServe("0.0.0.0:8080", Log(http.DefaultServeMux))
+	return http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", config.Serve.Port), Log(http.DefaultServeMux))
 }
 
 func Log(handler http.Handler) http.Handler {
