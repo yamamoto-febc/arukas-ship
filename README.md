@@ -87,6 +87,41 @@ WebHook URLは以下のように設定します。
 
 すでにArukasへデプロイ済みのコンテナの場合は更新が行われます。
 
+## Q&A
+
+#### Arukas上で`arukas-ship`が起動できないんだけど？
+  
+  Arukasコントロールパネル上でエラーが出ていないか確認してください。
+  エラーが出ていない場合、イメージ名`yamamotofebc/arukas-ship`が正しいか確認してみてください。
+
+#### 起動確認はどうすればいいの？
+
+  Arukasコントロールパネル上で表示されるEndpoint URLに直接ブラウザなどでアクセスしてみてください。
+  実際にアプリのデプロイまで確認したい場合は[こちら](https://docs.docker.com/docker-hub/webhooks/)の仕様に沿ったデータを
+  Endoint URLあてにPOSTしてみてください。
+
+#### `arukas-ship`がデプロイした時のArukasの設定はどうなってるの？
+
+  以下のようなパラメーターでデプロイしています。
+  
+  - `App Name` : DockerHubで設定するWebhook URLに含まれる`app`パラメータの値
+  - `Image` : DockerHubでWebhook登録したリポジトリの`latest`イメージ
+  - `Instance` : 1
+  - `Memory` : 256
+  - `Endpoint` : 空欄(Arukasによる自動割り当て)
+  - `Port` : TCP 80番
+  - `Env` : なし
+  - `Cmd` : なし
+
+  これらを変更したい場合、あらかじめArukas上に同じ`App Name`を持つアプリを
+  作成しておけばOKです。下記質問もご覧ください。
+
+#### デプロイ先のArukasの設定を変えたいんだけど？
+
+ あらかじめArukas上に同じ`App Name`を持つアプリを作成しておけばOKです。
+ `arukas-ship`は、同じ`App Name`を持つアプリがすでにArukas上に存在する場合は
+ 該当アプリの更新(パラメータ変更/コンテナ再起動)を行います。
+
 
 ## License
 
