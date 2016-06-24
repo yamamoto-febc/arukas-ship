@@ -2,6 +2,8 @@
 
 DockerHub & Arukas 連携Webhook アダプター
 
+関連記事：[Qiita:arukas-shipでプルリク駆動デリバリー](http://qiita.com/yamamoto-febc/items/135344bee0d2d5edf412)
+
 ## 概要
 
 [DockerHub](https://hub.docker.com/)へのDockerイメージpush時に送信できるWebhookを利用して
