@@ -4,6 +4,7 @@ import (
 	"fmt"
 	API "github.com/arukasio/cli"
 	"github.com/yamamoto-febc/arukas-ship/message"
+	"time"
 )
 
 type ArukasClient struct {
@@ -106,6 +107,39 @@ func (c *ArukasClient) updateContainer(container API.Container, msg *message.Inc
 	if err := c.client.Patch(nil, fmt.Sprintf("/containers/%s", container.ID), container); err != nil {
 		return err
 	}
+	// shutdown container
+	if err := c.client.Delete(fmt.Sprintf("/containers/%s/power", container.ID)); err != nil {
+		return err
+	}
 
+	if err := sleepUntilDown(c.client, container.ID, 300*time.Second); err != nil {
+		return err
+	}
+
+	// start container
+	if err := c.client.Post(nil, fmt.Sprintf("/containers/%s/power", container.ID), nil); err != nil {
+		return err
+	}
 	return nil
+}
+
+func sleepUntilDown(client *API.Client, containerID string, timeout time.Duration) error {
+	current := 0 * time.Second
+	interval := 5 * time.Second
+	for {
+		var container API.Container
+		if err := client.Get(&container, fmt.Sprintf("/containers/%s", containerID)); err != nil {
+			return err
+		}
+
+		if container.StatusText == "stopped" {
+			return nil
+		}
+		time.Sleep(interval)
+		current += interval
+
+		if timeout > 0 && current > timeout {
+			return fmt.Errorf("Timeout: sleepUntilUp")
+		}
+	}
 }
